@@ -64,7 +64,7 @@ export default function Modal({
         aria-hidden="true"
       />
       <div
-        className={`relative z-50 max-h-[90vh] w-full max-w-3xl overflow-auto rounded-xl bg-white p-5 shadow-xl ${className}`}
+        className={`relative z-50 max-h-[90vh] w-full max-w-4xl overflow-auto rounded-xl bg-white p-5 shadow-xl ${className}`}
       >
         {children}
       </div>
