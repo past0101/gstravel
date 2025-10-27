@@ -65,7 +65,7 @@ export default function FormsPage() {
   };
 
   return (
-    <div className="mx-auto max-w-6xl">
+    <div className="w-full">
       <div className="mb-6 flex flex-wrap items-end gap-3">
         <div className="min-w-[240px] flex-1">
           <h1 className="text-2xl font-semibold">Φόρμες</h1>

@@ -114,6 +114,7 @@ export default function FormRenderer({ eventId, mode = "internal" }: { eventId: 
         mode,
         gdprAccepted: mode === "public" ? !!gdprAccepted : true,
         submittedByUid: mode === "internal" ? (user?.uid || null) : null,
+        submittedByEmail: mode === "internal" ? (user?.email || null) : null,
         submittedAt: serverTimestamp(),
       });
       setValues({});
