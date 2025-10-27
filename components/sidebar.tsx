@@ -8,15 +8,27 @@ import { useAuth } from "@/components/auth-provider";
 
 function IconEvents(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" {...props}>
-      <path d="M8 2v4M16 2v4M3 9h18M5 12h14M5 16h10M5 20h6"/>
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      {...props}
+    >
+      <path d="M8 2v4M16 2v4M3 9h18M5 12h14M5 16h10M5 20h6" />
     </svg>
   );
 }
 
 function IconForms(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" {...props}>
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      {...props}
+    >
       <rect x="3" y="4" width="18" height="18" rx="2" />
       <path d="M8 2v4M16 2v4M7 12h10M7 16h10" />
     </svg>
@@ -25,22 +37,34 @@ function IconForms(props: React.SVGProps<SVGSVGElement>) {
 
 function IconUsers(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" {...props}>
-      <path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-      <circle cx="9" cy="7" r="4"/>
-      <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
-      <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      {...props}
+    >
+      <path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+      <circle cx="9" cy="7" r="4" />
+      <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+      <path d="M16 3.13a4 4 0 0 1 0 7.75" />
     </svg>
   );
 }
 
 function IconLists(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" {...props}>
-      <path d="M8 6h13M8 12h13M8 18h13"/>
-      <circle cx="3" cy="6" r="1"/>
-      <circle cx="3" cy="12" r="1"/>
-      <circle cx="3" cy="18" r="1"/>
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      {...props}
+    >
+      <path d="M8 6h13M8 12h13M8 18h13" />
+      <circle cx="3" cy="6" r="1" />
+      <circle cx="3" cy="12" r="1" />
+      <circle cx="3" cy="18" r="1" />
     </svg>
   );
 }
@@ -48,8 +72,8 @@ function IconLists(props: React.SVGProps<SVGSVGElement>) {
 const items = [
   { href: "/dashboard/events", label: "Events", Icon: IconEvents },
   { href: "/dashboard/forms", label: "Φόρμες", Icon: IconForms },
-  { href: "/dashboard/users", label: "Χρήστες", Icon: IconUsers },
   { href: "/dashboard/lists", label: "Λίστες", Icon: IconLists },
+  { href: "/dashboard/users", label: "Χρήστες", Icon: IconUsers },
 ];
 
 export default function Sidebar() {
@@ -84,10 +108,16 @@ export default function Sidebar() {
               }}
               className="ml-1 inline-flex items-center rounded-md p-2.5 hover:bg-zinc-100"
             >
-              <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M10 17l-1 1a3 3 0 01-2.12.88H6a3 3 0 01-3-3V8a3 3 0 013-3h.88A3 3 0 019 5l1 1"/>
-                <path d="M15 12H3"/>
-                <path d="M12 15l3-3-3-3"/>
+              <svg
+                viewBox="0 0 24 24"
+                className="h-5 w-5"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M10 17l-1 1a3 3 0 01-2.12.88H6a3 3 0 01-3-3V8a3 3 0 013-3h.88A3 3 0 019 5l1 1" />
+                <path d="M15 12H3" />
+                <path d="M12 15l3-3-3-3" />
               </svg>
             </button>
           </nav>
@@ -105,7 +135,9 @@ export default function Sidebar() {
               key={href}
               href={href}
               className={`flex items-center gap-5 rounded-lg px-5 py-3.5 text-[16px] hover:bg-white transition ${
-                pathname.startsWith(href) ? "bg-white shadow-sm font-medium" : ""
+                pathname.startsWith(href)
+                  ? "bg-white shadow-sm font-medium"
+                  : ""
               }`}
             >
               <Icon className="h-5 w-5" />
@@ -117,15 +149,29 @@ export default function Sidebar() {
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-3 min-w-0">
               {user?.photoURL ? (
-                <Image src={user.photoURL} alt={user.displayName ?? user.email ?? "User"} width={36} height={36} className="rounded-full object-cover" />
+                <Image
+                  src={user.photoURL}
+                  alt={user.displayName ?? user.email ?? "User"}
+                  width={36}
+                  height={36}
+                  className="rounded-full object-cover"
+                />
               ) : (
                 <div className="h-9 w-9 rounded-full bg-zinc-200 flex items-center justify-center text-sm font-medium text-zinc-700">
-                  {(user?.displayName?.[0] || user?.email?.[0] || "U").toUpperCase()}
+                  {(
+                    user?.displayName?.[0] ||
+                    user?.email?.[0] ||
+                    "U"
+                  ).toUpperCase()}
                 </div>
               )}
               <div className="min-w-0">
-                <div className="text-sm font-medium truncate">{user?.displayName || user?.email || "Χρήστης"}</div>
-                <div className="text-xs text-zinc-500 truncate">Συνδεδεμένος</div>
+                <div className="text-sm font-medium truncate">
+                  {user?.displayName || user?.email || "Χρήστης"}
+                </div>
+                <div className="text-xs text-zinc-500 truncate">
+                  Συνδεδεμένος
+                </div>
               </div>
             </div>
             <button
@@ -136,10 +182,16 @@ export default function Sidebar() {
               className="inline-flex items-center rounded-md p-2.5 hover:bg-zinc-200"
               title="Έξοδος"
             >
-              <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M10 17l-1 1a3 3 0 01-2.12.88H6a3 3 0 01-3-3V8a3 3 0 013-3h.88A3 3 0 019 5l1 1"/>
-                <path d="M15 12H3"/>
-                <path d="M12 15l3-3-3-3"/>
+              <svg
+                viewBox="0 0 24 24"
+                className="h-5 w-5"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M10 17l-1 1a3 3 0 01-2.12.88H6a3 3 0 01-3-3V8a3 3 0 013-3h.88A3 3 0 019 5l1 1" />
+                <path d="M15 12H3" />
+                <path d="M12 15l3-3-3-3" />
               </svg>
             </button>
           </div>

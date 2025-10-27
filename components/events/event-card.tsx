@@ -13,6 +13,7 @@ export type EventCardProps = {
   hasForm?: boolean;
   onEdit: () => void;
   onDelete: () => void;
+  onOpen?: () => void;
 };
 
 function IconLocation(props: React.SVGProps<SVGSVGElement>) {
@@ -124,9 +125,15 @@ export default function EventCard({
   hasForm,
   onEdit,
   onDelete,
+  onOpen,
 }: EventCardProps) {
   return (
-    <div className="relative overflow-hidden rounded-xl  border bg-white shadow-sm">
+    <div
+      onClick={onOpen}
+      className={`relative overflow-hidden rounded-xl  border bg-white shadow-sm ${
+        onOpen ? "cursor-pointer" : ""
+      }`}
+    >
       {photoBase64 ? (
         <img
           src={photoBase64}

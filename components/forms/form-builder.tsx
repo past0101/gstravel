@@ -6,7 +6,7 @@ import { db } from "@/lib/firebase";
 export type FormField = {
   id: string;
   label: string;
-  type: "text" | "number" | "radio" | "checkbox" | "select" | "date";
+  type: "text" | "number" | "radio" | "checkbox" | "select" | "date" | "phone" | "email";
   required?: boolean;
   options?: string[]; // for radio/select/checkbox group
 };
@@ -131,6 +131,8 @@ export default function FormBuilder({
       { value: "checkbox", label: "Checkbox" },
       { value: "select", label: "Dropdown" },
       { value: "date", label: "Ημερομηνία" },
+      { value: "phone", label: "Τηλέφωνο" },
+      { value: "email", label: "Email" },
     ],
     []
   );
@@ -164,60 +166,69 @@ export default function FormBuilder({
         </div>
       </div>
 
-      <div className="space-y-3 max-h-[50vh] overflow-auto pr-1">
+      <div className="space-y-3 max-h-[60vh] overflow-auto pr-1">
         {fields.length === 0 && (
           <div className="text-sm text-zinc-500">Δεν υπάρχουν πεδία. Πρόσθεσε με το κουμπί.</div>
         )}
-        {fields.map((f) => (
-          <div key={f.id} className="rounded-lg border p-3 grid grid-cols-1 sm:grid-cols-5 gap-3">
-            <input
-              className="sm:col-span-2 rounded-lg border px-3 py-2.5"
-              placeholder="Ετικέτα (όνομα πεδίου)"
-              value={f.label}
-              onChange={(e) => updateField(f.id, { label: e.target.value })}
-            />
-            <select
-              className="rounded-lg border px-3 py-2.5"
-              value={f.type}
-              onChange={(e) => updateField(f.id, { type: e.target.value as FormField["type"] })}
-            >
-              {typeOptions.map((t) => (
-                <option key={t.value} value={t.value}>
-                  {t.label}
-                </option>
-              ))}
-            </select>
-            <div className="sm:col-span-2">
-              {(f.type === "select" || f.type === "radio" || f.type === "checkbox") ? (
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-zinc-600">Επιλογές</span>
-                    <button type="button" onClick={() => addOption(f.id)} className="text-sm rounded border px-2 py-1">+ Προσθήκη</button>
-                  </div>
-                  {(f.options?.length ? f.options : ["Επιλογή 1", "Επιλογή 2"]).map((opt, idx) => (
-                    <div key={idx} className="flex items-center gap-2">
-                      <input
-                        className="flex-1 rounded-lg border px-3 py-2.5"
-                        value={opt}
-                        onChange={(e) => updateOption(f.id, idx, e.target.value)}
-                      />
-                      <button type="button" onClick={() => removeOption(f.id, idx)} className="text-red-600 text-sm">Διαγραφή</button>
-                    </div>
+        {fields.map((f, idx) => (
+          <div key={f.id || `field-${idx}`} className="rounded-xl border bg-white p-3 sm:p-4 shadow-sm">
+            <div className="grid grid-cols-1 sm:grid-cols-5 gap-3">
+              <div className="sm:col-span-2">
+                <span className="mb-1 block text-xs text-zinc-600">Ετικέτα</span>
+                <input
+                  className="w-full rounded-lg border px-3 py-2.5"
+                  placeholder="Ετικέτα (όνομα πεδίου)"
+                  value={f.label}
+                  onChange={(e) => updateField(f.id, { label: e.target.value })}
+                />
+              </div>
+              <div>
+                <span className="mb-1 block text-xs text-zinc-600">Τύπος</span>
+                <select
+                  className="w-full rounded-lg border px-3 py-2.5"
+                  value={f.type}
+                  onChange={(e) => updateField(f.id, { type: e.target.value as FormField["type"] })}
+                >
+                  {typeOptions.map((t) => (
+                    <option key={t.value} value={t.value}>
+                      {t.label}
+                    </option>
                   ))}
-                </div>
-              ) : (
-                <div className="text-sm text-zinc-500">Δεν απαιτούνται επιλογές</div>
-              )}
+                </select>
+              </div>
+              <div className="sm:col-span-2">
+                <span className="mb-1 block text-xs text-zinc-600">Επιλογές</span>
+                {(f.type === "select" || f.type === "radio" || f.type === "checkbox") ? (
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-zinc-600">Λίστα επιλογών</span>
+                      <button type="button" onClick={() => addOption(f.id)} className="text-sm rounded border px-2 py-1">+ Προσθήκη</button>
+                    </div>
+                    {(f.options?.length ? f.options : ["Επιλογή 1", "Επιλογή 2"]).map((opt, idx) => (
+                      <div key={idx} className="flex items-center gap-2">
+                        <input
+                          className="flex-1 rounded-lg border px-3 py-2.5"
+                          value={opt}
+                          onChange={(e) => updateOption(f.id, idx, e.target.value)}
+                        />
+                        <button type="button" onClick={() => removeOption(f.id, idx)} className="text-red-600 text-sm">Διαγραφή</button>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-sm text-zinc-500">Δεν απαιτούνται επιλογές</div>
+                )}
+              </div>
             </div>
-            <label className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                checked={!!f.required}
-                onChange={(e) => updateField(f.id, { required: e.target.checked })}
-              />
-              Υποχρεωτικό
-            </label>
-            <div className="sm:col-span-5 flex justify-end">
+            <div className="mt-3 flex items-center justify-between">
+              <label className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={!!f.required}
+                  onChange={(e) => updateField(f.id, { required: e.target.checked })}
+                />
+                <span className="text-sm">Υποχρεωτικό</span>
+              </label>
               <button type="button" onClick={() => removeField(f.id)} className="text-red-600 text-sm">
                 Διαγραφή
               </button>

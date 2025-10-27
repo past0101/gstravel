@@ -65,33 +65,54 @@ export default function FormsPage() {
   };
 
   return (
-    <div>
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-2xl font-semibold">Φόρμες</h1>
-        <button onClick={onCreate} className="rounded bg-black text-white px-4 py-2 hover:opacity-90">Δημιουργία Φόρμα</button>
+    <div className="mx-auto max-w-6xl">
+      <div className="mb-6 flex flex-wrap items-end gap-3">
+        <div className="min-w-[240px] flex-1">
+          <h1 className="text-2xl font-semibold">Φόρμες</h1>
+          <p className="text-sm text-zinc-600 mt-1">Δημιούργησε και επεξεργάσου φόρμες συμμετοχής για τα events.</p>
+        </div>
+        <button onClick={onCreate} className="inline-flex items-center rounded-lg bg-black text-white px-4 py-2 hover:opacity-90 whitespace-nowrap">
+          Δημιουργία Φόρμα
+        </button>
       </div>
 
-      <div className="space-y-3">
-        {forms.length === 0 && (
-          <div className="text-sm text-zinc-600">Δεν υπάρχουν φόρμες. Πάτησε "Δημιουργία Φόρμα" για να προσθέσεις.</div>
-        )}
-        {forms.map((f) => (
-          <div key={f.id} className="flex items-center justify-between rounded-xl border bg-white p-3">
-            <div className="min-w-0">
-              <div className="font-medium truncate">{eventNames[f.eventId] || f.eventId}</div>
-              <div className="text-sm text-zinc-600">Πεδία: {f.fields?.length || 0}</div>
+      {forms.length === 0 ? (
+        <div className="rounded-xl border bg-white p-6 text-center">
+          <div className="text-zinc-800 font-medium">Δεν υπάρχουν φόρμες</div>
+          <div className="text-sm text-zinc-600 mt-1">Πάτησε «Δημιουργία Φόρμα» για να προσθέσεις την πρώτη σου φόρμα.</div>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {forms.map((f) => (
+            <div key={f.id} className="group rounded-xl border bg-white p-4 shadow-sm hover:shadow transition">
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <div className="font-medium truncate">{eventNames[f.eventId] || f.eventId}</div>
+                  <div className="mt-1 inline-flex items-center gap-2 text-xs text-zinc-700">
+                    <span className="rounded-full bg-zinc-100 px-2 py-0.5 border whitespace-nowrap">Πεδία: {f.fields?.length || 0}</span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 shrink-0">
+                  <button
+                    onClick={() => onEdit(f.eventId, f.fields || [])}
+                    className="inline-flex items-center rounded-md border bg-white px-2.5 py-1.5 hover:bg-zinc-50 whitespace-nowrap"
+                    title="Επεξεργασία"
+                  >
+                    <IconEdit className="h-4 w-4" />
+                  </button>
+                  <button
+                    onClick={() => onDelete(f.eventId)}
+                    className="inline-flex items-center rounded-md border bg-white px-2.5 py-1.5 text-red-600 hover:bg-zinc-50 whitespace-nowrap"
+                    title="Διαγραφή"
+                  >
+                    <IconTrash className="h-4 w-4" />
+                  </button>
+                </div>
+              </div>
             </div>
-            <div className="flex items-center gap-2">
-              <button onClick={() => onEdit(f.eventId, f.fields || [])} className="inline-flex items-center rounded-md bg-white/90 backdrop-blur px-2.5 py-1.5 border hover:bg-white">
-                <IconEdit className="h-4 w-4" />
-              </button>
-              <button onClick={() => onDelete(f.eventId)} className="inline-flex items-center rounded-md bg-white/90 backdrop-blur px-2.5 py-1.5 border hover:bg-white text-red-600">
-                <IconTrash className="h-4 w-4" />
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
       <Modal open={open} onClose={() => setOpen(false)} labelledBy="form-builder-title">
         <FormBuilder
