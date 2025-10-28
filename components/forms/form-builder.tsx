@@ -27,6 +27,7 @@ export default function FormBuilder({
   const [fields, setFields] = useState<FormField[]>(initialFields || []);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const [existingForEvent, setExistingForEvent] = useState(false);
 
   const makeId = () =>
     (typeof crypto !== "undefined" && (crypto as any).randomUUID)
@@ -46,6 +47,16 @@ export default function FormBuilder({
       const list = snap.docs.map((d) => ({ id: d.id, name: (d.data() as any).name || d.id }));
       setEvents(list);
       if (!selectedEventId && list.length) setSelectedEventId(list[0].id);
+    });
+    return () => unsub();
+  }, [selectedEventId]);
+
+  // Watch if a form already exists for the selected event
+  useEffect(() => {
+    if (!selectedEventId) { setExistingForEvent(false); return; }
+    const ref = doc(db, "eventForms", selectedEventId);
+    const unsub = onSnapshot(ref, (snap) => {
+      setExistingForEvent(snap.exists());
     });
     return () => unsub();
   }, [selectedEventId]);
@@ -102,6 +113,11 @@ export default function FormBuilder({
       setError("Επίλεξε event");
       return;
     }
+    // prevent creating a second form for the event (when not editing)
+    if (!isEdit && existingForEvent) {
+      setError("Το επιλεγμένο event έχει ήδη φόρμα. Διέγραψε την υπάρχουσα για να δημιουργήσεις νέα.");
+      return;
+    }
     setSaving(true);
     setError("");
     try {
@@ -138,6 +154,7 @@ export default function FormBuilder({
   );
 
   const isEdit = !!initialEventId || (initialFields && initialFields.length > 0);
+  const creationBlocked = !isEdit && existingForEvent;
 
   return (
     <div className="space-y-4">
@@ -160,12 +177,18 @@ export default function FormBuilder({
           </select>
         </label>
         <div className="flex items-end">
-          <button type="button" onClick={addField} className="inline-flex items-center gap-2 rounded-md border border-slate-300 px-4 py-2 w-full hover:bg-slate-50 active:bg-slate-100 transition-colors duration-200">
+          <button type="button" onClick={addField} disabled={creationBlocked} className="inline-flex items-center gap-2 rounded-md border border-slate-300 px-4 py-2 w-full hover:bg-slate-50 active:bg-slate-100 transition-colors duration-200 disabled:opacity-60">
             <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
             Προσθήκη Πεδίο
           </button>
         </div>
       </div>
+
+      {creationBlocked && (
+        <div className="rounded-md border border-amber-200 bg-amber-50 text-amber-800 text-sm px-3 py-2">
+          Το επιλεγμένο event έχει ήδη φόρμα. Διαγράψτε την υπάρχουσα φόρμα για να μπορέσετε να προσθέσετε νέα.
+        </div>
+      )}
 
       <div className="space-y-3 max-h-[60vh] overflow-auto pr-1">
         {fields.length === 0 && (
@@ -252,7 +275,7 @@ export default function FormBuilder({
           <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 18L18 6"/><path d="M6 6l12 12"/></svg>
           Άκυρο
         </button>
-        <button type="button" disabled={saving} onClick={save} className="inline-flex items-center gap-2 rounded-md bg-cyan-600 text-white px-4 py-2 disabled:opacity-60 hover:bg-cyan-700 active:bg-cyan-800 transition-colors duration-200">
+        <button type="button" disabled={saving || creationBlocked} onClick={save} className="inline-flex items-center gap-2 rounded-md bg-cyan-600 text-white px-4 py-2 disabled:opacity-60 hover:bg-cyan-700 active:bg-cyan-800 transition-colors duration-200">
           <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12l5 5L20 7"/></svg>
           {saving ? "Αποθήκευση..." : "Αποθήκευση"}
         </button>

@@ -148,9 +148,13 @@ export default function EventCard({
           <div className="text-lg font-semibold text-slate-800 truncate" title={name}>
             {name}
           </div>
-          {hasForm && (
+          {hasForm ? (
             <span className="shrink-0 rounded-full bg-cyan-50 px-2 py-0.5 text-xs text-cyan-700 border border-cyan-200">
               Φόρμα
+            </span>
+          ) : (
+            <span className="shrink-0 rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-600 border border-slate-200">
+              Χωρίς Φόρμα
             </span>
           )}
         </div>
