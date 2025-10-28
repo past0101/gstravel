@@ -6,14 +6,16 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "generate:icons": "node scripts/generate-icons.mjs"
   },
   "dependencies": {
     "firebase": "^12.4.0",
     "next": "16.0.0",
     "react": "19.2.0",
     "react-dom": "19.2.0",
-    "xlsx": "^0.18.5"
+    "xlsx": "^0.18.5",
+    "sharp": "^0.33.5"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
