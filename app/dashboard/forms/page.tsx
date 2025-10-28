@@ -68,41 +68,42 @@ export default function FormsPage() {
     <div className="w-full">
       <div className="mb-6 flex flex-wrap items-end gap-3">
         <div className="min-w-[240px] flex-1">
-          <h1 className="text-2xl font-semibold">Φόρμες</h1>
-          <p className="text-sm text-zinc-600 mt-1">Δημιούργησε και επεξεργάσου φόρμες συμμετοχής για τα events.</p>
+          <h1 className="text-2xl font-semibold text-slate-800">Φόρμες</h1>
+          <p className="text-sm text-slate-500 mt-1">Δημιούργησε και επεξεργάσου φόρμες συμμετοχής για τα events.</p>
         </div>
-        <button onClick={onCreate} className="inline-flex items-center rounded-lg bg-black text-white px-4 py-2 hover:opacity-90 whitespace-nowrap">
+        <button onClick={onCreate} className="inline-flex items-center gap-2 rounded-md bg-cyan-600 text-white px-4 py-2 shadow-sm hover:bg-cyan-700 active:bg-cyan-800 transition-colors duration-200 whitespace-nowrap">
+          <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
           Δημιουργία Φόρμα
         </button>
       </div>
 
       {forms.length === 0 ? (
-        <div className="rounded-xl border bg-white p-6 text-center">
-          <div className="text-zinc-800 font-medium">Δεν υπάρχουν φόρμες</div>
-          <div className="text-sm text-zinc-600 mt-1">Πάτησε «Δημιουργία Φόρμα» για να προσθέσεις την πρώτη σου φόρμα.</div>
+        <div className="rounded-xl border border-slate-200 bg-white p-6 text-center shadow-sm">
+          <div className="text-slate-800 font-medium">Δεν υπάρχουν φόρμες</div>
+          <div className="text-sm text-slate-600 mt-1">Πάτησε «Δημιουργία Φόρμα» για να προσθέσεις την πρώτη σου φόρμα.</div>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {forms.map((f) => (
-            <div key={f.id} className="group rounded-xl border bg-white p-4 shadow-sm hover:shadow transition">
+            <div key={f.id} className="group rounded-xl border border-slate-200 bg-white p-4 shadow-sm hover:shadow transition">
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
-                  <div className="font-medium truncate">{eventNames[f.eventId] || f.eventId}</div>
-                  <div className="mt-1 inline-flex items-center gap-2 text-xs text-zinc-700">
-                    <span className="rounded-full bg-zinc-100 px-2 py-0.5 border whitespace-nowrap">Πεδία: {f.fields?.length || 0}</span>
+                  <div className="font-medium text-slate-800 truncate">{eventNames[f.eventId] || f.eventId}</div>
+                  <div className="mt-1 inline-flex items-center gap-2 text-xs text-slate-700">
+                    <span className="rounded-full bg-cyan-50 text-cyan-700 px-2 py-0.5 border border-cyan-200 whitespace-nowrap">Πεδία: {f.fields?.length || 0}</span>
                   </div>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
                   <button
                     onClick={() => onEdit(f.eventId, f.fields || [])}
-                    className="inline-flex items-center rounded-md border bg-white px-2.5 py-1.5 hover:bg-zinc-50 whitespace-nowrap"
+                    className="inline-flex items-center rounded-md border border-slate-300 bg-white px-2.5 py-1.5 hover:bg-slate-50 whitespace-nowrap transition-colors duration-200"
                     title="Επεξεργασία"
                   >
                     <IconEdit className="h-4 w-4" />
                   </button>
                   <button
                     onClick={() => onDelete(f.eventId)}
-                    className="inline-flex items-center rounded-md border bg-white px-2.5 py-1.5 text-red-600 hover:bg-zinc-50 whitespace-nowrap"
+                    className="inline-flex items-center rounded-md border border-slate-300 bg-white px-2.5 py-1.5 text-red-600 hover:bg-slate-50 whitespace-nowrap transition-colors duration-200"
                     title="Διαγραφή"
                   >
                     <IconTrash className="h-4 w-4" />

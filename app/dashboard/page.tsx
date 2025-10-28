@@ -1,4 +1,8 @@
+"use client";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { collection, onSnapshot, orderBy, query, limit } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
 function Card({ href, title, desc, gradient, Icon }: { href: string; title: string; desc: string; gradient: string; Icon: any }) {
   return (
@@ -45,11 +49,21 @@ function IconUsers(props: React.SVGProps<SVGSVGElement>) {
 }
 
 export default function DashboardHome() {
+  const [latest, setLatest] = useState<Array<{ id: string; name: string; description?: string; photoBase64?: string | null; startDate?: string }>>([]);
+
+  useEffect(() => {
+    const q = query(collection(db, "events"), orderBy("createdAt", "desc"), limit(12));
+    const unsub = onSnapshot(q, (snap) => {
+      setLatest(snap.docs.map((d) => ({ id: d.id, ...(d.data() as any) })));
+    });
+    return () => unsub();
+  }, []);
+
   return (
     <div className="w-full">
       <div className="mb-6">
-        <h1 className="text-2xl md:text-3xl font-semibold">Dashboard</h1>
-        <p className="text-sm text-zinc-600 mt-1">Γρήγορες συντομεύσεις για τις βασικές ενότητες.</p>
+        <h1 className="text-2xl md:text-3xl font-semibold text-slate-800">Καλώς ήρθες στο Dashboard</h1>
+        <p className="text-sm text-slate-500 mt-1">Διαχειρίσου εύκολα events, φόρμες, λίστες και χρήστες.</p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -57,30 +71,66 @@ export default function DashboardHome() {
           href="/dashboard/events"
           title="Events"
           desc="Διαχείριση εκδηλώσεων, πληροφορίες, ημερομηνίες και assets."
-          gradient="bg-gradient-to-br from-sky-500 to-blue-600 text-white"
+          gradient="bg-gradient-to-br from-slate-700 to-slate-900 text-white"
           Icon={IconCalendar}
         />
         <Card
           href="/dashboard/forms"
           title="Φόρμες"
           desc="Δημιούργησε και επεξεργάσου φόρμες συμμετοχής για τα events."
-          gradient="bg-gradient-to-br from-emerald-500 to-teal-600 text-white"
+          gradient="bg-gradient-to-br from-cyan-600 to-sky-700 text-white"
           Icon={IconForm}
         />
         <Card
           href="/dashboard/lists"
           title="Λίστες"
           desc="Δες και εξήγαγε τις καταχωρήσεις των συμμετεχόντων ανά event."
-          gradient="bg-gradient-to-br from-fuchsia-500 to-violet-600 text-white"
+          gradient="bg-gradient-to-br from-indigo-600 to-violet-700 text-white"
           Icon={IconTable}
         />
         <Card
           href="/dashboard/users"
           title="Χρήστες"
-          desc="Διαχείριση χρηστών και δικαιωμάτων (σύντομα)."
-          gradient="bg-gradient-to-br from-amber-500 to-orange-600 text-white"
+          desc="Διαχείριση χρηστών και στοιχείων λογαριασμού."
+          gradient="bg-gradient-to-br from-emerald-600 to-teal-700 text-white"
           Icon={IconUsers}
         />
+      </div>
+
+      {/* Latest events carousel */}
+      <div className="mt-8">
+        <div className="mb-2 flex items-center justify-between">
+          <h2 className="text-lg md:text-xl font-semibold text-slate-800">Τελευταία Events</h2>
+          <Link href="/dashboard/events" className="text-sm text-cyan-700 hover:underline">Προβολή όλων</Link>
+        </div>
+        <div className="relative">
+          <div className="flex gap-3 overflow-x-auto snap-x snap-mandatory pb-2 -mx-2 px-2">
+            {latest.map((e) => (
+              <Link key={e.id} href={`/dashboard/events`} className="snap-start shrink-0 w-72 rounded-xl border border-slate-200 bg-white shadow-sm hover:shadow transition">
+                {e.photoBase64 ? (
+                  <img src={e.photoBase64} alt={e.name} className="h-40 w-full object-cover rounded-t-xl" />
+                ) : (
+                  <div className="h-40 w-full rounded-t-xl bg-slate-100" />
+                )}
+                <div className="p-3">
+                  <div className="font-medium text-slate-800 truncate" title={e.name}>{e.name}</div>
+                  {e.startDate && (
+                    <div className="mt-1 text-xs text-slate-500 inline-flex items-center gap-1">
+                      <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                      {e.startDate}
+                    </div>
+                  )}
+                  {e.description && (
+                    <div className="mt-1 text-xs text-slate-600 line-clamp-2">{e.description}</div>
+                  )}
+                </div>
+              </Link>
+            ))}
+            {latest.length === 0 && (
+              <div className="text-sm text-slate-500 py-6">Δεν υπάρχουν ακόμη events.</div>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
