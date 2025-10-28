@@ -9,6 +9,8 @@ export type FormField = {
   type: "text" | "number" | "radio" | "checkbox" | "select" | "date" | "phone" | "email";
   required?: boolean;
   options?: string[]; // for radio/select/checkbox group
+  // Conditional subfields shown when a specific radio option is selected
+  optionChildren?: Record<string, FormField[]>;
 };
 
 export default function FormBuilder({
@@ -37,7 +39,7 @@ export default function FormBuilder({
   // ensure each incoming field has an id for React key stability
   useEffect(() => {
     if (initialFields && initialFields.length) {
-      setFields(initialFields.map((f: FormField) => ({ ...f, id: f.id || makeId() })));
+      setFields(initialFields.map((f: FormField) => ({ ...f, id: f.id || makeId(), optionChildren: f.optionChildren || {} })));
     }
   }, [initialFields]);
 
@@ -86,6 +88,34 @@ export default function FormBuilder({
     );
   };
 
+  const addChildField = (id: string, optLabel: string) => {
+    setFields(prev => prev.map(f => {
+      if (f.id !== id) return f;
+      const map = { ...(f.optionChildren || {}) };
+      const arr = [...(map[optLabel] || [])];
+      arr.push({ id: makeId(), label: "Υποπεδίο", type: "text", required: false });
+      map[optLabel] = arr;
+      return { ...f, optionChildren: map };
+    }));
+  };
+  const updateChildField = (id: string, optLabel: string, childId: string, patch: Partial<FormField>) => {
+    setFields(prev => prev.map(f => {
+      if (f.id !== id) return f;
+      const map = { ...(f.optionChildren || {}) };
+      const arr = [...(map[optLabel] || [])].map(c => c.id === childId ? { ...c, ...patch } : c);
+      map[optLabel] = arr;
+      return { ...f, optionChildren: map };
+    }));
+  };
+  const removeChildField = (id: string, optLabel: string, childId: string) => {
+    setFields(prev => prev.map(f => {
+      if (f.id !== id) return f;
+      const map = { ...(f.optionChildren || {}) };
+      map[optLabel] = (map[optLabel] || []).filter(c => c.id !== childId);
+      return { ...f, optionChildren: map };
+    }));
+  };
+
   const updateOption = (id: string, idx: number, value: string) => {
     setFields((prev) =>
       prev.map((f) => {
@@ -128,6 +158,7 @@ export default function FormBuilder({
           type: f.type,
           required: !!f.required,
           options: f.options?.filter(Boolean) || [],
+          optionChildren: f.optionChildren || {},
         })),
         updatedAt: new Date().toISOString(),
       });
@@ -197,7 +228,7 @@ export default function FormBuilder({
         {fields.map((f, idx) => (
           <div key={f.id || `field-${idx}`} className="rounded-xl border border-slate-200 bg-white p-3 sm:p-4 shadow-sm">
             <div className="grid grid-cols-1 sm:grid-cols-5 gap-3">
-              <div className="sm:col-span-2">
+              <div className="sm:col-span-3">
                 <span className="mb-1 block text-xs text-slate-600">Ετικέτα</span>
                 <input
                   className="w-full rounded-lg border border-slate-300 px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400"
@@ -206,7 +237,7 @@ export default function FormBuilder({
                   onChange={(e) => updateField(f.id, { label: e.target.value })}
                 />
               </div>
-              <div>
+              <div className="sm:col-span-2">
                 <span className="mb-1 block text-xs text-slate-600">Τύπος</span>
                 <select
                   className="w-full rounded-lg border border-slate-300 px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400"
@@ -220,7 +251,7 @@ export default function FormBuilder({
                   ))}
                 </select>
               </div>
-              <div className="sm:col-span-2">
+              <div className="sm:col-span-5">
                 <span className="mb-1 block text-xs text-slate-600">Επιλογές</span>
                 {(f.type === "select" || f.type === "radio" || f.type === "checkbox") ? (
                   <div className="space-y-2">
@@ -232,16 +263,47 @@ export default function FormBuilder({
                       </button>
                     </div>
                     {(f.options?.length ? f.options : ["Επιλογή 1", "Επιλογή 2"]).map((opt, idx) => (
-                      <div key={idx} className="flex items-center gap-2">
-                        <input
-                          className="flex-1 rounded-lg border border-slate-300 px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400"
-                          value={opt}
-                          onChange={(e) => updateOption(f.id, idx, e.target.value)}
-                        />
-                        <button type="button" onClick={() => removeOption(f.id, idx)} className="inline-flex items-center gap-1.5 text-red-600 text-sm rounded-md border border-red-200 px-2.5 py-1 hover:bg-red-50 transition-colors duration-200">
-                          <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 6h18"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>
-                          Διαγραφή
-                        </button>
+                      <div key={idx} className="space-y-2 rounded-md border border-slate-200 p-2">
+                        <div className="flex items-center gap-2">
+                          <input
+                            className="flex-1 rounded-lg border border-slate-300 px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400"
+                            value={opt}
+                            onChange={(e) => updateOption(f.id, idx, e.target.value)}
+                          />
+                          <button type="button" onClick={() => removeOption(f.id, idx)} className="inline-flex items-center gap-1.5 text-red-600 text-sm rounded-md border border-red-200 px-2.5 py-1 hover:bg-red-50 transition-colors duration-200">
+                            <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 6h18"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+                            Διαγραφή
+                          </button>
+                        </div>
+                        {f.type === 'radio' && (
+                          <div className="space-y-2">
+                            <div className="text-xs text-slate-600">Υποπεδία όταν επιλεγεί: <span className="font-medium">{opt || '(κενό)'}</span></div>
+                            {(f.optionChildren?.[opt] || []).map((cf) => (
+                              <div key={cf.id} className="grid grid-cols-1 sm:grid-cols-6 gap-2">
+                                <div className="sm:col-span-4">
+                                  <span className="mb-1 block text-xs text-slate-600">Ετικέτα υποπεδίου</span>
+                                  <input className="w-full rounded-lg border border-slate-300 px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400" value={cf.label} onChange={(e)=>updateChildField(f.id, opt, cf.id, { label: e.target.value })} />
+                                </div>
+                                <div className="sm:col-span-2 self-end">
+                                  <label className="inline-flex items-center gap-2">
+                                    <input type="checkbox" checked={!!cf.required} onChange={(e)=>updateChildField(f.id, opt, cf.id, { required: e.target.checked })} />
+                                    <span className="text-sm">Υποχρεωτικό</span>
+                                  </label>
+                                </div>
+                                <div className="sm:col-span-6 flex justify-end">
+                                  <button type="button" onClick={()=>removeChildField(f.id, opt, cf.id)} className="inline-flex items-center gap-1.5 text-red-600 text-sm rounded-md border border-red-200 px-2.5 py-1 hover:bg-red-50 transition-colors duration-200">
+                                    <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 6h18"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+                                    Αφαίρεση
+                                  </button>
+                                </div>
+                              </div>
+                            ))}
+                            <button type="button" onClick={()=>addChildField(f.id, opt)} className="inline-flex items-center gap-1.5 text-xs rounded-md border border-slate-300 px-2.5 py-1 hover:bg-slate-50 transition-colors duration-200">
+                              <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+                              Προσθήκη υποπεδίου
+                            </button>
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>

@@ -66,7 +66,7 @@ export default function Modal({
         aria-hidden="true"
       />
       <div
-        className={`relative z-50 max-h-[90vh] w-full max-w-4xl overflow-auto rounded-xl bg-white p-5 shadow-xl ${className}`}
+        className={`relative z-50 max-h-[90vh] w-full max-w-6xl overflow-auto rounded-xl bg-white p-5 shadow-xl ${className}`}
       >
         {showClose && (
           <button
@@ -74,7 +74,16 @@ export default function Modal({
             onClick={onClose}
             className="absolute right-2 top-2 inline-flex items-center justify-center rounded-md border border-slate-300 p-1.5 text-slate-600 hover:bg-slate-50"
           >
-            <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 18L18 6"/><path d="M6 6l12 12"/></svg>
+            <svg
+              className="h-4 w-4"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path d="M6 18L18 6" />
+              <path d="M6 6l12 12" />
+            </svg>
           </button>
         )}
         {children}

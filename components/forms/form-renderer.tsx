@@ -27,6 +27,7 @@ export default function FormRenderer({ eventId, mode = "internal" }: { eventId: 
         type: f.type,
         required: !!f.required,
         options: f.options || [],
+        optionChildren: f.optionChildren || {},
       })));
       setLoading(false);
     }, (e) => {
@@ -72,6 +73,18 @@ export default function FormRenderer({ eventId, mode = "internal" }: { eventId: 
       } else if (f.type === "checkbox") {
         if (!Array.isArray(v) || v.length === 0) {
           errs[f.label] = "Επιλέξτε τουλάχιστον μία επιλογή";
+        }
+      }
+      // validate required child fields for selected radio option
+      if (f.type === 'radio') {
+        const sel: string | undefined = values[f.label];
+        const childs = sel ? (f.optionChildren?.[sel] || []) : [];
+        for (const cf of childs) {
+          if (!cf.required) continue;
+          const cv = values[cf.label];
+          if (cv === undefined || cv === null || String(cv).trim() === '') {
+            errs[cf.label] = 'Απαιτείται';
+          }
         }
       }
     }
@@ -207,6 +220,27 @@ export default function FormRenderer({ eventId, mode = "internal" }: { eventId: 
                 {fieldErrors[f.label] && <div className="w-full text-xs text-red-600">{fieldErrors[f.label]}</div>}
               </div>
             )}
+            {/* Conditional subfields when a specific radio option is selected */}
+            {f.type === 'radio' && (() => {
+              const sel = values[f.label];
+              const childs = sel ? (f.optionChildren?.[sel] || []) : [];
+              if (!childs.length) return null;
+              return (
+                <div className="mt-2 space-y-2 border-l-2 border-slate-200 pl-3">
+                  {childs.map((cf) => (
+                    <div key={cf.id} className="grid grid-cols-1 gap-1">
+                      <label className="text-sm text-slate-700">
+                        {cf.label}{cf.required && <span className="text-red-600"> *</span>}
+                      </label>
+                      {(cf.type === 'text' || !cf.type) && (
+                        <input className={`rounded-lg border border-slate-300 px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 ${fieldErrors[cf.label] ? 'border-red-500' : ''}`} value={values[cf.label] ?? ''} onChange={(e)=>onChange(cf.label, e.target.value)} placeholder="" />
+                      )}
+                      {fieldErrors[cf.label] && <div className="text-xs text-red-600">{fieldErrors[cf.label]}</div>}
+                    </div>
+                  ))}
+                </div>
+              );
+            })()}
             {f.type === "checkbox" && (
               <div className="flex flex-col gap-2">
                 {(f.options || []).map((opt, idx) => {
@@ -230,7 +264,7 @@ export default function FormRenderer({ eventId, mode = "internal" }: { eventId: 
                 {fieldErrors[f.label] && <div className="text-xs text-red-600">{fieldErrors[f.label]}</div>}
               </div>
             )}
-            {(f.type === 'text' || f.type === 'number' || f.type === 'date' || f.type === 'select') && fieldErrors[f.label] && (
+            {(f.type === 'text' || f.type === 'number' || f.type === 'date' || f.type === 'select' || f.type === 'email' || f.type === 'phone') && fieldErrors[f.label] && (
               <div className="text-xs text-red-600">{fieldErrors[f.label]}</div>
             )}
           </div>
