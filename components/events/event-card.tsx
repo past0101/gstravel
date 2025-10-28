@@ -130,8 +130,8 @@ export default function EventCard({
   return (
     <div
       onClick={onOpen}
-      className={`relative overflow-hidden rounded-xl  border bg-white shadow-sm ${
-        onOpen ? "cursor-pointer" : ""
+      className={`relative overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition-all duration-200 hover:shadow ${
+        onOpen ? "cursor-pointer hover:ring-2 hover:ring-cyan-400 hover:border-cyan-300" : ""
       }`}
     >
       {photoBase64 ? (
@@ -141,20 +141,20 @@ export default function EventCard({
           className="h-[290px] w-full object-cover"
         />
       ) : (
-        <div className="h-40 w-full bg-zinc-100" />
+        <div className="h-40 w-full bg-slate-100" />
       )}
       <div className="p-4 space-y-2">
         <div className="flex items-center gap-2">
-          <div className="text-lg font-semibold truncate" title={name}>
+          <div className="text-lg font-semibold text-slate-800 truncate" title={name}>
             {name}
           </div>
           {hasForm && (
-            <span className="shrink-0 rounded-full bg-zinc-100 px-2 py-0.5 text-xs text-zinc-700 border">
+            <span className="shrink-0 rounded-full bg-cyan-50 px-2 py-0.5 text-xs text-cyan-700 border border-cyan-200">
               Φόρμα
             </span>
           )}
         </div>
-        <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-zinc-700">
+        <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-slate-700">
           {startDate && (
             <div className="flex items-center gap-2 col-span-1 sm:col-span-2">
               <IconCalendar className="h-4 w-4" /> {startDate}
@@ -162,9 +162,9 @@ export default function EventCard({
           )}
         </div>
         {description && (
-          <p className="text-sm text-zinc-600 line-clamp-3">{description}</p>
+          <p className="text-sm text-slate-600 line-clamp-3">{description}</p>
         )}
-        <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-zinc-700">
+        <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-slate-700">
           {location && (
             <div className="flex items-center gap-2">
               <IconLocation className="h-4 w-4" /> {location}
@@ -180,11 +180,11 @@ export default function EventCard({
               <Link
                 href={link}
                 target="_blank"
-                className="inline-flex items-center rounded-md border px-3 py-1.5 text-sm text-zinc-700 hover:bg-zinc-100 cursor-pointer"
+                className="inline-flex items-center gap-2 rounded-md border border-slate-300 px-3 py-1.5 text-sm text-slate-700 hover:bg-slate-50 active:bg-slate-100 cursor-pointer transition-colors duration-200"
                 onClick={(e) => e.stopPropagation()}
                 title={link}
               >
-                Σύνδεσμος Event
+                <IconLink className="h-4 w-4" /> Σύνδεσμος Event
               </Link>
             </div>
           )}
@@ -193,13 +193,13 @@ export default function EventCard({
       <div className="absolute bottom-3 right-3 flex items-center gap-2">
         <button
           onClick={(e) => { e.stopPropagation(); onEdit(); }}
-          className="inline-flex items-center rounded-md bg-white/90 backdrop-blur px-2.5 py-1.5 border hover:bg-white cursor-pointer"
+          className="inline-flex items-center rounded-md bg-white/90 backdrop-blur px-2.5 py-1.5 border border-slate-300 hover:bg-slate-50 cursor-pointer transition-colors duration-200"
         >
           <IconEdit className="h-4 w-4" />
         </button>
         <button
           onClick={(e) => { e.stopPropagation(); onDelete(); }}
-          className="inline-flex items-center rounded-md bg-white/90 backdrop-blur px-2.5 py-1.5 border hover:bg-white text-red-600 cursor-pointer"
+          className="inline-flex items-center rounded-md bg-white/90 backdrop-blur px-2.5 py-1.5 border border-slate-300 hover:bg-slate-50 text-red-600 cursor-pointer transition-colors duration-200"
         >
           <IconTrash className="h-4 w-4" />
         </button>

@@ -141,13 +141,13 @@ export default function FormBuilder({
 
   return (
     <div className="space-y-4">
-      <h2 id="form-builder-title" className="text-xl font-semibold">{isEdit ? "Επεξεργασία Φόρμας" : "Δημιουργία Φόρμα"}</h2>
+      <h2 id="form-builder-title" className="text-xl font-semibold text-slate-800">{isEdit ? "Επεξεργασία Φόρμας" : "Δημιουργία Φόρμα"}</h2>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <label className="block sm:col-span-2">
-          <span className="mb-1 block text-sm text-zinc-600">Επιλογή Event</span>
+          <span className="mb-1 block text-sm text-slate-600">Επιλογή Event</span>
           <select
-            className="w-full rounded-lg border px-3 py-2.5 disabled:bg-zinc-100 disabled:cursor-not-allowed"
+            className="w-full rounded-lg border border-slate-300 px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 disabled:bg-slate-100 disabled:cursor-not-allowed"
             value={selectedEventId}
             onChange={(e) => setSelectedEventId(e.target.value)}
             disabled={lockEvent}
@@ -160,7 +160,8 @@ export default function FormBuilder({
           </select>
         </label>
         <div className="flex items-end">
-          <button type="button" onClick={addField} className="rounded-lg border px-4 py-2 w-full">
+          <button type="button" onClick={addField} className="inline-flex items-center gap-2 rounded-md border border-slate-300 px-4 py-2 w-full hover:bg-slate-50 active:bg-slate-100 transition-colors duration-200">
+            <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
             Προσθήκη Πεδίο
           </button>
         </div>
@@ -168,24 +169,24 @@ export default function FormBuilder({
 
       <div className="space-y-3 max-h-[60vh] overflow-auto pr-1">
         {fields.length === 0 && (
-          <div className="text-sm text-zinc-500">Δεν υπάρχουν πεδία. Πρόσθεσε με το κουμπί.</div>
+          <div className="text-sm text-slate-500">Δεν υπάρχουν πεδία. Πρόσθεσε με το κουμπί.</div>
         )}
         {fields.map((f, idx) => (
-          <div key={f.id || `field-${idx}`} className="rounded-xl border bg-white p-3 sm:p-4 shadow-sm">
+          <div key={f.id || `field-${idx}`} className="rounded-xl border border-slate-200 bg-white p-3 sm:p-4 shadow-sm">
             <div className="grid grid-cols-1 sm:grid-cols-5 gap-3">
               <div className="sm:col-span-2">
-                <span className="mb-1 block text-xs text-zinc-600">Ετικέτα</span>
+                <span className="mb-1 block text-xs text-slate-600">Ετικέτα</span>
                 <input
-                  className="w-full rounded-lg border px-3 py-2.5"
+                  className="w-full rounded-lg border border-slate-300 px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400"
                   placeholder="Ετικέτα (όνομα πεδίου)"
                   value={f.label}
                   onChange={(e) => updateField(f.id, { label: e.target.value })}
                 />
               </div>
               <div>
-                <span className="mb-1 block text-xs text-zinc-600">Τύπος</span>
+                <span className="mb-1 block text-xs text-slate-600">Τύπος</span>
                 <select
-                  className="w-full rounded-lg border px-3 py-2.5"
+                  className="w-full rounded-lg border border-slate-300 px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400"
                   value={f.type}
                   onChange={(e) => updateField(f.id, { type: e.target.value as FormField["type"] })}
                 >
@@ -197,26 +198,32 @@ export default function FormBuilder({
                 </select>
               </div>
               <div className="sm:col-span-2">
-                <span className="mb-1 block text-xs text-zinc-600">Επιλογές</span>
+                <span className="mb-1 block text-xs text-slate-600">Επιλογές</span>
                 {(f.type === "select" || f.type === "radio" || f.type === "checkbox") ? (
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-zinc-600">Λίστα επιλογών</span>
-                      <button type="button" onClick={() => addOption(f.id)} className="text-sm rounded border px-2 py-1">+ Προσθήκη</button>
+                      <span className="text-sm text-slate-600">Λίστα επιλογών</span>
+                      <button type="button" onClick={() => addOption(f.id)} className="inline-flex items-center gap-1.5 text-sm rounded-md border border-slate-300 px-2.5 py-1 hover:bg-slate-50 transition-colors duration-200">
+                        <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+                        Προσθήκη
+                      </button>
                     </div>
                     {(f.options?.length ? f.options : ["Επιλογή 1", "Επιλογή 2"]).map((opt, idx) => (
                       <div key={idx} className="flex items-center gap-2">
                         <input
-                          className="flex-1 rounded-lg border px-3 py-2.5"
+                          className="flex-1 rounded-lg border border-slate-300 px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400"
                           value={opt}
                           onChange={(e) => updateOption(f.id, idx, e.target.value)}
                         />
-                        <button type="button" onClick={() => removeOption(f.id, idx)} className="text-red-600 text-sm">Διαγραφή</button>
+                        <button type="button" onClick={() => removeOption(f.id, idx)} className="inline-flex items-center gap-1.5 text-red-600 text-sm rounded-md border border-red-200 px-2.5 py-1 hover:bg-red-50 transition-colors duration-200">
+                          <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 6h18"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+                          Διαγραφή
+                        </button>
                       </div>
                     ))}
                   </div>
                 ) : (
-                  <div className="text-sm text-zinc-500">Δεν απαιτούνται επιλογές</div>
+                  <div className="text-sm text-slate-500">Δεν απαιτούνται επιλογές</div>
                 )}
               </div>
             </div>
@@ -229,7 +236,8 @@ export default function FormBuilder({
                 />
                 <span className="text-sm">Υποχρεωτικό</span>
               </label>
-              <button type="button" onClick={() => removeField(f.id)} className="text-red-600 text-sm">
+              <button type="button" onClick={() => removeField(f.id)} className="inline-flex items-center gap-1.5 text-red-600 text-sm rounded-md border border-red-200 px-2.5 py-1 hover:bg-red-50 transition-colors duration-200">
+                <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 6h18"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>
                 Διαγραφή
               </button>
             </div>
@@ -240,10 +248,12 @@ export default function FormBuilder({
       {error && <div className="text-sm text-red-600">{error}</div>}
 
       <div className="flex justify-end gap-3">
-        <button type="button" onClick={onClose} className="rounded-lg border px-4 py-2">
+        <button type="button" onClick={onClose} className="inline-flex items-center gap-2 rounded-md border border-slate-300 px-4 py-2 hover:bg-slate-50 transition-colors duration-200">
+          <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 18L18 6"/><path d="M6 6l12 12"/></svg>
           Άκυρο
         </button>
-        <button type="button" disabled={saving} onClick={save} className="rounded-lg bg-black text-white px-4 py-2 disabled:opacity-60">
+        <button type="button" disabled={saving} onClick={save} className="inline-flex items-center gap-2 rounded-md bg-cyan-600 text-white px-4 py-2 disabled:opacity-60 hover:bg-cyan-700 active:bg-cyan-800 transition-colors duration-200">
+          <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12l5 5L20 7"/></svg>
           {saving ? "Αποθήκευση..." : "Αποθήκευση"}
         </button>
       </div>

@@ -204,16 +204,16 @@ export default function EventForm({
 
   return (
     <form onSubmit={onSubmit} className="space-y-5 ">
-      <h2 id="event-form-title" className="text-xl font-semibold">
+      <h2 id="event-form-title" className="text-xl font-semibold text-slate-800">
         {initial?.id ? "Επεξεργασία Event" : "Νέο Event"}
       </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <label className="block">
-          <span className="mb-1 block text-sm text-zinc-600">Ονομασία</span>
+          <span className="mb-1 block text-sm text-slate-600">Ονομασία</span>
           <div className="relative">
-            <IconText className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
+            <IconText className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
             <input
-              className="w-full rounded-lg border px-10 py-2.5 outline-none focus:ring-2 focus:ring-zinc-300"
+              className="w-full rounded-lg border border-slate-300 px-10 py-2.5 outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
@@ -221,33 +221,33 @@ export default function EventForm({
           </div>
         </label>
         <label className="block">
-          <span className="mb-1 block text-sm text-zinc-600">Ημερομηνία Έναρξης</span>
+          <span className="mb-1 block text-sm text-slate-600">Ημερομηνία Έναρξης</span>
           <div className="relative">
-            <IconCalendar className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
+            <IconCalendar className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
             <input
               type="date"
-              className="w-full rounded-lg border px-10 py-2.5 outline-none focus:ring-2 focus:ring-zinc-300"
+              className="w-full rounded-lg border border-slate-300 px-10 py-2.5 outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400"
               value={startDateISO}
               onChange={(e) => setStartDateISO(e.target.value)}
             />
           </div>
         </label>
         <label className="block">
-          <span className="mb-1 block text-sm text-zinc-600">Τοποθεσία</span>
+          <span className="mb-1 block text-sm text-slate-600">Τοποθεσία</span>
           <div className="relative">
-            <IconLocation className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
+            <IconLocation className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
             <input
-              className="w-full rounded-lg border px-10 py-2.5 outline-none focus:ring-2 focus:ring-zinc-300"
+              className="w-full rounded-lg border border-slate-300 px-10 py-2.5 outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400"
               value={location}
               onChange={(e) => setLocation(e.target.value)}
             />
           </div>
         </label>
         <label className="block sm:col-span-2">
-          <span className="mb-1 block text-sm text-zinc-600">Περιγραφή</span>
+          <span className="mb-1 block text-sm text-slate-600">Περιγραφή</span>
           <div className="relative">
             <textarea
-              className="w-full rounded-lg border px-4 py-3 outline-none focus:ring-2 focus:ring-zinc-300"
+              className="w-full rounded-lg border border-slate-300 px-4 py-3 outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400"
               rows={4}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
@@ -255,11 +255,11 @@ export default function EventForm({
           </div>
         </label>
         <label className="block">
-          <span className="mb-1 block text-sm text-zinc-600">Ξενοδοχείο</span>
+          <span className="mb-1 block text-sm text-slate-600">Ξενοδοχείο</span>
           <div className="relative">
-            <IconHotel className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
+            <IconHotel className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
             <input
-              className="w-full rounded-lg border px-10 py-2.5 outline-none focus:ring-2 focus:ring-zinc-300"
+              className="w-full rounded-lg border border-slate-300 px-10 py-2.5 outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400"
               value={hotel}
               onChange={(e) => setHotel(e.target.value)}
             />
@@ -270,10 +270,10 @@ export default function EventForm({
             Σύνδεσμος Event
           </span>
           <div className="relative">
-            <IconLink className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
+            <IconLink className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
             <input
               type="url"
-              className="w-full rounded-lg border px-10 py-2.5 outline-none focus:ring-2 focus:ring-zinc-300"
+              className="w-full rounded-lg border border-slate-300 px-10 py-2.5 outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400"
               value={link}
               onChange={(e) => setLink(e.target.value)}
             />
@@ -281,9 +281,9 @@ export default function EventForm({
         </label>
 
         <div className="sm:col-span-2">
-          <span className="mb-1 block text-sm text-zinc-600">Φωτογραφία</span>
+          <span className="mb-1 block text-sm text-slate-600">Φωτογραφία</span>
           <div
-            className="relative rounded-xl border border-dashed bg-zinc-50 hover:bg-zinc-100 transition cursor-pointer"
+            className="relative rounded-xl border border-dashed border-slate-300 bg-slate-50 hover:bg-slate-100 transition cursor-pointer"
             onClick={() => fileInputRef.current?.click()}
           >
             <input
@@ -302,7 +302,7 @@ export default function EventForm({
                 />
               </div>
             ) : (
-              <div className="flex h-40 items-center justify-center gap-3 p-6 text-zinc-600">
+              <div className="flex h-40 items-center justify-center gap-3 p-6 text-slate-600">
                 <IconImage className="h-6 w-6" />
                 <div className="text-sm">
                   Πάτησε για επιλογή εικόνας ή σύρε την εδώ
@@ -317,15 +317,17 @@ export default function EventForm({
         <button
           type="button"
           onClick={() => onDone()}
-          className="rounded-lg border px-4 py-2"
+          className="inline-flex items-center gap-2 rounded-md border border-slate-300 px-4 py-2 hover:bg-slate-50 transition-colors duration-200"
         >
+          <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 18L18 6"/><path d="M6 6l12 12"/></svg>
           Άκυρο
         </button>
         <button
           type="submit"
           disabled={loading}
-          className="rounded-lg bg-black text-white px-4 py-2 disabled:opacity-60"
+          className="inline-flex items-center gap-2 rounded-md bg-cyan-600 text-white px-4 py-2 disabled:opacity-60 hover:bg-cyan-700 active:bg-cyan-800 transition-colors duration-200"
         >
+          <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12l5 5L20 7"/></svg>
           {loading ? "Αποθήκευση..." : "Αποθήκευση"}
         </button>
       </div>

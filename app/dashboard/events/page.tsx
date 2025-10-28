@@ -102,56 +102,63 @@ export default function EventsPage() {
       <div className="mb-4">
         <div className="flex flex-wrap items-end gap-3">
           <div className="min-w-[200px] flex-1">
-            <h1 className="text-2xl font-semibold">Events</h1>
-            <p className="text-sm text-zinc-600 mt-1">Διαχείριση εκδηλώσεων και γρήγορη αναζήτηση.</p>
+            <h1 className="text-2xl font-semibold text-slate-800">Events</h1>
+            <p className="text-sm text-slate-500 mt-1">Διαχείριση εκδηλώσεων και γρήγορη αναζήτηση.</p>
           </div>
           <div className="flex items-center gap-2">
             <button
               onClick={onCreate}
-              className="rounded bg-black text-white px-4 py-2 hover:opacity-90 whitespace-nowrap"
+              className="inline-flex items-center gap-2 rounded-md bg-cyan-600 text-white px-4 py-2 shadow-sm hover:bg-cyan-700 active:bg-cyan-800 transition-colors duration-200 whitespace-nowrap"
             >
+              <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
               Νέο Event
             </button>
 
             <button
               onClick={() => setOpenFormBuilder(true)}
-              className="rounded border px-4 py-2 hover:bg-zinc-100 whitespace-nowrap"
+              className="inline-flex items-center gap-2 rounded-md border px-4 py-2 shadow-sm hover:bg-slate-50 active:bg-slate-100 transition-colors duration-200 whitespace-nowrap"
             >
+              <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18"/></svg>
               Δημιουργία Φόρμα
             </button>
           </div>
         </div>
 
-        <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <div className="sm:col-span-2">
-            <input
-              value={qText}
-              onChange={(e) => setQText(e.target.value)}
-              placeholder="Αναζήτηση με όνομα ή τοποθεσία (υποστηρίζονται και λατινικοί χαρακτήρες)"
-              className="w-full rounded-lg border px-3 py-2"
-            />
-          </div>
-          <div className="flex items-center gap-2">
-            <select
-              value={formFilter}
-              onChange={(e) => setFormFilter(e.target.value as any)}
-              className="w-full rounded-lg border px-3 py-2"
-            >
-              <option value="all">Όλα</option>
-              <option value="with">Με φόρμα</option>
-              <option value="without">Χωρίς φόρμα</option>
-            </select>
-            <button
-              type="button"
-              onClick={() => { setQText(""); setFormFilter('all'); }}
-              className="rounded-lg border px-3 py-2 whitespace-nowrap"
-            >
-              Καθαρισμός
-            </button>
+        {/* Filters card */}
+        <div className="mt-4 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div className="sm:col-span-2">
+              <div className="flex items-center gap-2">
+                <svg className="h-4 w-4 text-zinc-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                <input
+                  value={qText}
+                  onChange={(e) => setQText(e.target.value)}
+                  placeholder="Αναζήτηση με όνομα ή τοποθεσία (υποστηρίζονται και λατινικοί χαρακτήρες)"
+                  className="w-full rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400"
+                />
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <select
+                value={formFilter}
+                onChange={(e) => setFormFilter(e.target.value as any)}
+                className="w-full rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400"
+              >
+                <option value="all">Όλα</option>
+                <option value="with">Με φόρμα</option>
+                <option value="without">Χωρίς φόρμα</option>
+              </select>
+              <button
+                type="button"
+                onClick={() => { setQText(""); setFormFilter('all'); }}
+                className="inline-flex items-center gap-2 rounded-lg border border-slate-300 px-3 py-2 hover:bg-slate-50 active:bg-slate-100 transition-colors duration-200 whitespace-nowrap"
+              >
+                <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 6h18"/><path d="M8 6v12"/></svg>
+                Καθαρισμός
+              </button>
+            </div>
           </div>
         </div>
-
-        <div className="mt-4 border-t" />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">

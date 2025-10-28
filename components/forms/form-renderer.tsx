@@ -128,15 +128,15 @@ export default function FormRenderer({ eventId, mode = "internal" }: { eventId: 
 
   const isEmpty = useMemo(() => fields.length === 0, [fields]);
 
-  if (loading) return <div className="text-sm text-zinc-600">Φόρτωση φόρμας...</div>;
-  if (isEmpty) return <div className="text-sm text-zinc-600">Δεν έχει οριστεί φόρμα για αυτό το event.</div>;
+  if (loading) return <div className="text-sm text-slate-600">Φόρτωση φόρμας...</div>;
+  if (isEmpty) return <div className="text-sm text-slate-600">Δεν έχει οριστεί φόρμα για αυτό το event.</div>;
 
   return (
     <div className="space-y-5">
       {mode === "public" && (
-        <div className="rounded-xl border bg-zinc-50 p-4">
-          <div className="text-lg font-semibold mb-1">{eventName}</div>
-          <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-zinc-700">
+        <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+          <div className="text-lg font-semibold text-slate-800 mb-1">{eventName}</div>
+          <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-slate-700">
             {eventMeta?.startDate && (
               <div className="flex items-center gap-2"><svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> {eventMeta.startDate}</div>
             )}
@@ -148,17 +148,17 @@ export default function FormRenderer({ eventId, mode = "internal" }: { eventId: 
             )}
           </div>
           {eventMeta?.description && (
-            <p className="mt-2 text-sm text-zinc-600">{eventMeta.description}</p>
+            <p className="mt-2 text-sm text-slate-600">{eventMeta.description}</p>
           )}
         </div>
       )}
 
       <div className="space-y-4">
-        <div className="text-base font-semibold">Φόρμα συμμετοχής</div>
+        <div className="text-base font-semibold text-slate-800">Φόρμα συμμετοχής</div>
         {fields.map((f) => (
           <div key={f.id} className="grid grid-cols-1 gap-1">
-            <label className="text-sm text-zinc-700 flex items-center gap-2">
-              <span className="inline-flex items-center justify-center h-5 w-5 text-zinc-600">
+            <label className="text-sm text-slate-700 flex items-center gap-2">
+              <span className="inline-flex items-center justify-center h-5 w-5 text-slate-600">
                 {f.type === "text" && (<svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 6h16M4 10h16M4 14h10M4 18h8"/></svg>)}
                 {f.type === "number" && (<svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 7h14M5 12h14M5 17h14"/></svg>)}
                 {f.type === "date" && (<svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>)}
@@ -174,22 +174,22 @@ export default function FormRenderer({ eventId, mode = "internal" }: { eventId: 
               <span>{f.label}{f.required && <span className="text-red-600"> *</span>}</span>
             </label>
             {f.type === "text" && (
-              <input className={`rounded-lg border px-3 py-2.5 ${fieldErrors[f.label] ? 'border-red-500' : ''}`} value={values[f.label] ?? ""} onChange={(e) => onChange(f.label, e.target.value)} />
+              <input className={`rounded-lg border border-slate-300 px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 ${fieldErrors[f.label] ? 'border-red-500' : ''}`} value={values[f.label] ?? ""} onChange={(e) => onChange(f.label, e.target.value)} />
             )}
             {f.type === "number" && (
-              <input type="number" className={`rounded-lg border px-3 py-2.5 ${fieldErrors[f.label] ? 'border-red-500' : ''}`} value={values[f.label] ?? ""} onChange={(e) => onChange(f.label, e.target.value)} />
+              <input type="number" className={`rounded-lg border border-slate-300 px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 ${fieldErrors[f.label] ? 'border-red-500' : ''}`} value={values[f.label] ?? ""} onChange={(e) => onChange(f.label, e.target.value)} />
             )}
             {f.type === "date" && (
-              <input type="date" className={`rounded-lg border px-3 py-2.5 ${fieldErrors[f.label] ? 'border-red-500' : ''}`} value={values[f.label] ?? ""} onChange={(e) => onChange(f.label, e.target.value)} />
+              <input type="date" className={`rounded-lg border border-slate-300 px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 ${fieldErrors[f.label] ? 'border-red-500' : ''}`} value={values[f.label] ?? ""} onChange={(e) => onChange(f.label, e.target.value)} />
             )}
             {f.type === "email" && (
-              <input type="email" className={`rounded-lg border px-3 py-2.5 ${fieldErrors[f.label] ? 'border-red-500' : ''}`} value={values[f.label] ?? ""} onChange={(e) => onChange(f.label, e.target.value)} placeholder="name@example.com" />
+              <input type="email" className={`rounded-lg border border-slate-300 px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 ${fieldErrors[f.label] ? 'border-red-500' : ''}`} value={values[f.label] ?? ""} onChange={(e) => onChange(f.label, e.target.value)} placeholder="name@example.com" />
             )}
             {f.type === "phone" && (
-              <input type="tel" className={`rounded-lg border px-3 py-2.5 ${fieldErrors[f.label] ? 'border-red-500' : ''}`} value={values[f.label] ?? ""} onChange={(e) => onChange(f.label, e.target.value)} placeholder="+30 69XXXXXXXX" />
+              <input type="tel" className={`rounded-lg border border-slate-300 px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 ${fieldErrors[f.label] ? 'border-red-500' : ''}`} value={values[f.label] ?? ""} onChange={(e) => onChange(f.label, e.target.value)} placeholder="+30 69XXXXXXXX" />
             )}
             {f.type === "select" && (
-              <select className={`rounded-lg border px-3 py-2.5 ${fieldErrors[f.label] ? 'border-red-500' : ''}`} value={values[f.label] ?? ""} onChange={(e) => onChange(f.label, e.target.value)}>
+              <select className={`rounded-lg border border-slate-300 px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 ${fieldErrors[f.label] ? 'border-red-500' : ''}`} value={values[f.label] ?? ""} onChange={(e) => onChange(f.label, e.target.value)}>
                 <option value="">-- Επιλέξτε --</option>
                 {(f.options || []).map((opt, idx) => (
                   <option key={idx} value={opt}>{opt}</option>
@@ -237,9 +237,9 @@ export default function FormRenderer({ eventId, mode = "internal" }: { eventId: 
         ))}
         {error && <div className="text-sm text-red-600">{error}</div>}
         {mode === "public" && (
-          <div className="flex items-start gap-2 rounded-lg border bg-zinc-50 p-3">
+          <div className="flex items-start gap-2 rounded-lg border border-slate-300 bg-slate-50 p-3">
             <input id="gdpr" type="checkbox" className="mt-1" checked={gdprAccepted} onChange={(e) => setGdprAccepted(e.target.checked)} />
-            <label htmlFor="gdpr" className="text-sm text-zinc-700">
+            <label htmlFor="gdpr" className="text-sm text-slate-700">
               Συμφωνώ με την επεξεργασία των προσωπικών μου δεδομένων για τον σκοπό της συμμετοχής στο event.
               <button type="button" className="ml-2 underline" onClick={() => setGdprOpen(true)}>Μάθε περισσότερα</button>
             </label>
@@ -247,8 +247,8 @@ export default function FormRenderer({ eventId, mode = "internal" }: { eventId: 
         )}
 
         <div className="pt-1">
-          <button onClick={submit} className="inline-flex items-center gap-2 rounded-lg bg-black text-white px-4 py-2">
-            <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+          <button onClick={submit} className="inline-flex items-center gap-2 rounded-md bg-cyan-600 text-white px-4 py-2 shadow-sm hover:bg-cyan-700 active:bg-cyan-800 transition-colors duration-200">
+            <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12l5 5L20 7"/></svg>
             Υποβολή
           </button>
         </div>
@@ -258,18 +258,24 @@ export default function FormRenderer({ eventId, mode = "internal" }: { eventId: 
       {mode === "public" && (
         <Modal open={gdprOpen} onClose={() => setGdprOpen(false)} labelledBy="gdpr-title">
           <div className="space-y-3">
-            <h3 id="gdpr-title" className="text-lg font-semibold">Πληροφόρηση για την επεξεργασία δεδομένων (GDPR)</h3>
-            <p className="text-sm text-zinc-700">
+            <h3 id="gdpr-title" className="text-lg font-semibold text-slate-800">Πληροφόρηση για την επεξεργασία δεδομένων (GDPR)</h3>
+            <p className="text-sm text-slate-700">
               Τα στοιχεία που καταχωρείτε θα χρησιμοποιηθούν αποκλειστικά για τη διαχείριση της
               συμμετοχής σας στο συγκεκριμένο event (επικοινωνία, οργάνωση, επιβεβαίωση).
               Θα τηρούνται με ασφάλεια και δεν θα διαβιβαστούν σε τρίτους, πέραν από
               συνεργάτες που είναι απαραίτητοι για τη διοργάνωση. Μπορείτε ανά πάσα στιγμή
               να ζητήσετε διαγραφή ή ενημέρωση των δεδομένων σας.
             </p>
-            <p className="text-xs text-zinc-500">Με την επιλογή «Συμφωνώ» αποδέχεστε την παραπάνω ενημέρωση.</p>
+            <p className="text-xs text-slate-500">Με την επιλογή «Συμφωνώ» αποδέχεστε την παραπάνω ενημέρωση.</p>
             <div className="flex justify-end gap-2 pt-1">
-              <button type="button" className="rounded-lg border px-3 py-2" onClick={() => setGdprOpen(false)}>Κλείσιμο</button>
-              <button type="button" className="rounded-lg bg-black text-white px-3 py-2" onClick={() => { setGdprAccepted(true); setGdprOpen(false); }}>Συμφωνώ</button>
+              <button type="button" className="inline-flex items-center gap-2 rounded-md border border-slate-300 px-3 py-2 hover:bg-slate-50 transition-colors duration-200" onClick={() => setGdprOpen(false)}>
+                <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 18L18 6"/><path d="M6 6l12 12"/></svg>
+                Κλείσιμο
+              </button>
+              <button type="button" className="inline-flex items-center gap-2 rounded-md bg-cyan-600 text-white px-3 py-2 hover:bg-cyan-700 active:bg-cyan-800 transition-colors duration-200" onClick={() => { setGdprAccepted(true); setGdprOpen(false); }}>
+                <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12l5 5L20 7"/></svg>
+                Συμφωνώ
+              </button>
             </div>
           </div>
         </Modal>
