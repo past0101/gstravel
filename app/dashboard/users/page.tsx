@@ -248,8 +248,9 @@ export default function UsersPage() {
 
       {/* Desktop: table */}
       <div className="hidden md:block overflow-auto rounded-xl border border-slate-200 bg-white shadow-sm">
+        <div className="overflow-hidden rounded-xl">
         <table className="min-w-[700px] w-full text-sm">
-          <thead className="bg-slate-50 text-slate-700">
+          <thead className="bg-slate-50 text-slate-700 border-b border-slate-200">
             <tr>
               <th className="px-3 py-2 text-left">Email</th>
               <th className="px-3 py-2 text-left">Όνομα</th>
@@ -259,15 +260,15 @@ export default function UsersPage() {
               <th className="px-3 py-2 text-left w-40">Ενέργειες</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="divide-y divide-slate-200">
             {filtered.map(u => (
-              <tr key={u.uid} className="border-t">
-                <td className="px-3 py-2">{u.email}</td>
-                <td className="px-3 py-2">{(u.displayName || '').split(' ').slice(0,-1).join(' ') || '-'}</td>
-                <td className="px-3 py-2">{(u.displayName || '').split(' ').slice(-1).join(' ') || '-'}</td>
-                <td className="px-3 py-2">{u.phoneNumber || '-'}</td>
-                <td className="px-3 py-2">{u.disabled ? 'Απενεργοποιημένος' : 'Ενεργός'}</td>
-                <td className="px-3 py-2">
+              <tr key={u.uid} className="hover:bg-slate-50">
+                <td className="px-3 py-2 align-top">{u.email}</td>
+                <td className="px-3 py-2 align-top">{(u.displayName || '').split(' ').slice(0,-1).join(' ') || '-'}</td>
+                <td className="px-3 py-2 align-top">{(u.displayName || '').split(' ').slice(-1).join(' ') || '-'}</td>
+                <td className="px-3 py-2 align-top">{u.phoneNumber || '-'}</td>
+                <td className="px-3 py-2 align-top">{u.disabled ? 'Απενεργοποιημένος' : 'Ενεργός'}</td>
+                <td className="px-3 py-2 align-top">
                   <div className="flex items-center gap-2">
                     <button onClick={()=>openEdit(u)} className="inline-flex items-center gap-2 rounded-md border border-slate-300 px-3 py-1.5 hover:bg-slate-50 transition-colors duration-200">
                       <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 21h6l12-12a2.828 2.828 0 10-4-4L5 17l-2 4z"/></svg>
@@ -283,6 +284,7 @@ export default function UsersPage() {
             ))}
           </tbody>
         </table>
+        </div>
       </div>
 
       <div className="mt-3 flex items-center justify-between">
