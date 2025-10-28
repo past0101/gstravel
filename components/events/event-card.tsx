@@ -181,6 +181,7 @@ export default function EventCard({
                 href={link}
                 target="_blank"
                 className="inline-flex items-center rounded-md border px-3 py-1.5 text-sm text-zinc-700 hover:bg-zinc-100 cursor-pointer"
+                onClick={(e) => e.stopPropagation()}
                 title={link}
               >
                 Σύνδεσμος Event
@@ -191,13 +192,13 @@ export default function EventCard({
       </div>
       <div className="absolute bottom-3 right-3 flex items-center gap-2">
         <button
-          onClick={onEdit}
+          onClick={(e) => { e.stopPropagation(); onEdit(); }}
           className="inline-flex items-center rounded-md bg-white/90 backdrop-blur px-2.5 py-1.5 border hover:bg-white cursor-pointer"
         >
           <IconEdit className="h-4 w-4" />
         </button>
         <button
-          onClick={onDelete}
+          onClick={(e) => { e.stopPropagation(); onDelete(); }}
           className="inline-flex items-center rounded-md bg-white/90 backdrop-blur px-2.5 py-1.5 border hover:bg-white text-red-600 cursor-pointer"
         >
           <IconTrash className="h-4 w-4" />

@@ -25,6 +25,8 @@ export default function EventsPage() {
   const [selected, setSelected] = useState<EventDoc | null>(null);
   const [shareLink, setShareLink] = useState<string>("");
   const [copied, setCopied] = useState(false);
+  const [qText, setQText] = useState("");
+  const [formFilter, setFormFilter] = useState<"all" | "with" | "without">("all");
   const q = useMemo(
     () => query(collection(db, "events"), orderBy("createdAt", "desc")),
     []
@@ -74,29 +76,86 @@ export default function EventsPage() {
     await deleteDoc(doc(db, "events", id));
   };
 
+  const transliterateElToLat = (s: string) => {
+    const map: Record<string, string> = {
+      'α':'a','β':'b','γ':'g','δ':'d','ε':'e','ζ':'z','η':'i','θ':'th','ι':'i','κ':'k','λ':'l','μ':'m','ν':'n','ξ':'x','ο':'o','π':'p','ρ':'r','σ':'s','ς':'s','τ':'t','υ':'y','φ':'f','χ':'h','ψ':'ps','ω':'o',
+      'ά':'a','έ':'e','ί':'i','ϊ':'i','ΐ':'i','ό':'o','ύ':'y','ϋ':'y','ΰ':'y','ή':'i','ώ':'o',
+      'Α':'a','Β':'b','Γ':'g','Δ':'d','Ε':'e','Ζ':'z','Η':'i','Θ':'th','Ι':'i','Κ':'k','Λ':'l','Μ':'m','Ν':'n','Ξ':'x','Ο':'o','Π':'p','Ρ':'r','Σ':'s','Τ':'t','Υ':'y','Φ':'f','Χ':'h','Ψ':'ps','Ω':'o',
+      'Ά':'a','Έ':'e','Ί':'i','Ϊ':'i','Ό':'o','Ύ':'y','Ϋ':'y','Ή':'i','Ώ':'o'
+    };
+    return s.split("").map(ch => map[ch] ?? ch).join("");
+  };
+  const normalize = (s: string) => transliterateElToLat(s.normalize('NFD').replace(/\p{Diacritic}/gu,'').toLowerCase());
+
+  const filtered = useMemo(() => {
+    const qn = normalize(qText);
+    return items.filter((it) => {
+      const matchesQ = qn ? (normalize(it.name || "").includes(qn) || normalize(it.location || "").includes(qn)) : true;
+      const hasForm = formEventIds.has(it.id!);
+      const matchesForm = formFilter === 'all' ? true : formFilter === 'with' ? hasForm : !hasForm;
+      return matchesQ && matchesForm;
+    });
+  }, [items, qText, formFilter, formEventIds]);
+
   return (
     <div>
-      <div className="mb-4 flex items-center justify-between gap-3">
-        <h1 className="text-2xl font-semibold">Events</h1>
-        <div className="ml-auto flex items-center gap-2">
-          <button
-            onClick={onCreate}
-            className="rounded bg-black text-white px-4 py-2 hover:opacity-90"
-          >
-            Νέο Event
-          </button>
+      <div className="mb-4">
+        <div className="flex flex-wrap items-end gap-3">
+          <div className="min-w-[200px] flex-1">
+            <h1 className="text-2xl font-semibold">Events</h1>
+            <p className="text-sm text-zinc-600 mt-1">Διαχείριση εκδηλώσεων και γρήγορη αναζήτηση.</p>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={onCreate}
+              className="rounded bg-black text-white px-4 py-2 hover:opacity-90 whitespace-nowrap"
+            >
+              Νέο Event
+            </button>
 
-          <button
-            onClick={() => setOpenFormBuilder(true)}
-            className="rounded border px-4 py-2 hover:bg-zinc-100"
-          >
-            Δημιουργία Φόρμα
-          </button>
+            <button
+              onClick={() => setOpenFormBuilder(true)}
+              className="rounded border px-4 py-2 hover:bg-zinc-100 whitespace-nowrap"
+            >
+              Δημιουργία Φόρμα
+            </button>
+          </div>
         </div>
+
+        <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div className="sm:col-span-2">
+            <input
+              value={qText}
+              onChange={(e) => setQText(e.target.value)}
+              placeholder="Αναζήτηση με όνομα ή τοποθεσία (υποστηρίζονται και λατινικοί χαρακτήρες)"
+              className="w-full rounded-lg border px-3 py-2"
+            />
+          </div>
+          <div className="flex items-center gap-2">
+            <select
+              value={formFilter}
+              onChange={(e) => setFormFilter(e.target.value as any)}
+              className="w-full rounded-lg border px-3 py-2"
+            >
+              <option value="all">Όλα</option>
+              <option value="with">Με φόρμα</option>
+              <option value="without">Χωρίς φόρμα</option>
+            </select>
+            <button
+              type="button"
+              onClick={() => { setQText(""); setFormFilter('all'); }}
+              className="rounded-lg border px-3 py-2 whitespace-nowrap"
+            >
+              Καθαρισμός
+            </button>
+          </div>
+        </div>
+
+        <div className="mt-4 border-t" />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
-        {items.map((it) => (
+        {filtered.map((it) => (
           <EventCard
             key={it.id}
             id={it.id!}

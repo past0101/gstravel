@@ -86,7 +86,9 @@ export default function Sidebar() {
       {/* Mobile top bar */}
       <div className="md:hidden sticky top-0 z-20 w-full border-b bg-white/90 backdrop-blur supports-backdrop-filter:bg-white/60">
         <div className="mx-auto max-w-7xl px-3 py-2 flex items-center gap-3">
-          <Image src="/logo.webp" alt="Logo" width={130} height={40} priority />
+          <Link href="/dashboard" aria-label="Αρχική">
+            <Image src="/logo.webp" alt="Logo" width={130} height={40} priority />
+          </Link>
           <nav className="ml-auto flex items-center gap-2.5">
             {items.map(({ href, label, Icon }) => (
               <Link
@@ -127,7 +129,9 @@ export default function Sidebar() {
       {/* Desktop sidebar */}
       <aside className="hidden md:flex md:w-72 md:min-h-screen md:flex-col md:border-r md:bg-zinc-50">
         <div className="p-5">
-          <Image src="/logo.webp" alt="Logo" width={170} height={52} priority />
+          <Link href="/dashboard" aria-label="Αρχική">
+            <Image src="/logo.webp" alt="Logo" width={170} height={52} priority />
+          </Link>
         </div>
         <nav className="px-3 py-2 space-y-2.5 flex-1">
           {items.map(({ href, label, Icon }) => (
