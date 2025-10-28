@@ -37,3 +37,15 @@ body {
 a { color: inherit; }
 
 small, .text-muted { color: var(--muted-foreground); }
+
+/* Improve legibility of form controls on Windows/laptops */
+input, select, textarea {
+  color: #0f172a; /* slate-800 */
+  -webkit-font-smoothing: auto; /* subpixel on WebKit */
+  -moz-osx-font-smoothing: auto;
+  text-rendering: optimizeLegibility;
+}
+input::placeholder, textarea::placeholder {
+  color: #94a3b8; /* slate-400 */
+  opacity: 1; /* ensure visible placeholder contrast */
+}
