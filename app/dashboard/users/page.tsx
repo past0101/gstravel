@@ -23,6 +23,7 @@ async function listUsers(token?: string) {
 
 export default function UsersPage() {
   const { user } = useAuth();
+  const PROTECTED_EMAIL = "past0101@hotmail.com";
   const [users, setUsers] = useState<User[]>([]);
   const [nextToken, setNextToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -114,6 +115,10 @@ export default function UsersPage() {
   };
 
   const onDelete = async (u: User) => {
+    if ((u.email || "").toLowerCase() === PROTECTED_EMAIL.toLowerCase()) {
+      alert("Δεν επιτρέπεται να σβήσεις τον δημιουργό αυτού του app. Θα έρθει στον ύπνο σου ντυμένος διάβολος 😈");
+      return;
+    }
     if (!confirm("Διαγραφή χρήστη;")) return;
     const res = await fetch(`/api/users/${u.uid}`, { method: "DELETE" });
     if (!res.ok) { alert("Αποτυχία διαγραφής"); return; }
