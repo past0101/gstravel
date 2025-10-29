@@ -1,21 +1,37 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+    function isSignedIn() { return request.auth != null; }
 
-    // Χαλαρή πρόσβαση μόνο για authenticated χρήστες
+    // Events: δημόσιο read, write μόνο από authenticated
     match /events/{eventId} {
-      allow read, create, update, delete: if request.auth != null;
+      allow read: if true;
+      allow create, update, delete: if isSignedIn();
     }
 
+    // Event forms: δημόσιο read, write μόνο από authenticated
     match /eventForms/{eventId} {
-      allow read, create, update, delete: if request.auth != null;
+      allow read: if true;
+      allow create, update, delete: if isSignedIn();
     }
 
     match /eventSubmissions/{submissionId} {
-      // Δημόσιες υποβολές: επιτρέπουμε create χωρίς auth
-      allow create: if true;
+      // Δημόσιες υποβολές: επιτρέπουμε create χωρίς auth με validation
+      allow create: if
+        request.resource.data.keys().hasOnly([
+          'eventId', 'values', 'mode', 'gdprAccepted',
+          'submittedByUid', 'submittedByEmail', 'submittedAt'
+        ]) &&
+        request.resource.data.eventId is string &&
+        // Υπάρχει φόρμα για το event
+        exists(/databases/$(database)/documents/eventForms/$(request.resource.data.eventId)) &&
+        request.resource.data.values is map &&
+        request.resource.data.mode in ['public', 'internal'] &&
+        request.resource.data.gdprAccepted is bool &&
+        request.resource.data.submittedAt is timestamp;
+
       // Προβολή/τροποποίηση/διαγραφή μόνο από authenticated χρήστες
-      allow read, update, delete: if request.auth != null;
+      allow read, update, delete: if isSignedIn();
     }
 
     // match /{document=**} {
